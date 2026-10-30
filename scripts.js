@@ -38,22 +38,6 @@ https://templatemo.com/tm-600-prism-flux
             }
         ];
 
-        // Skills data
-        const skillsData = [
-            { name: 'React.js', icon: '⚛️', level: 95, category: 'frontend' },
-            { name: 'Node.js', icon: '🟢', level: 90, category: 'backend' },
-            { name: 'TypeScript', icon: '📘', level: 88, category: 'frontend' },
-            { name: 'AWS', icon: '☁️', level: 92, category: 'cloud' },
-            { name: 'Docker', icon: '🐳', level: 85, category: 'cloud' },
-            { name: 'Python', icon: '🐍', level: 93, category: 'backend' },
-            { name: 'Kubernetes', icon: '☸️', level: 82, category: 'cloud' },
-            { name: 'GraphQL', icon: '◈', level: 87, category: 'backend' },
-            { name: 'TensorFlow', icon: '🤖', level: 78, category: 'emerging' },
-            { name: 'Blockchain', icon: '🔗', level: 75, category: 'emerging' },
-            { name: 'Vue.js', icon: '💚', level: 85, category: 'frontend' },
-            { name: 'MongoDB', icon: '🍃', level: 90, category: 'backend' }
-        ];
-
         // Scroll to section function
         function scrollToSection(sectionId) {
             const section = document.getElementById(sectionId);
@@ -238,57 +222,9 @@ https://templatemo.com/tm-600-prism-flux
             startAutoRotate();
         }
 
-        // Initialize hexagonal skills grid
-        function initSkillsGrid() {
-            const skillsGrid = document.getElementById('skillsGrid');
-            const categoryTabs = document.querySelectorAll('.category-tab');
-            
-            function displaySkills(category = 'all') {
-                skillsGrid.innerHTML = '';
-                
-                const filteredSkills = category === 'all' 
-                    ? skillsData 
-                    : skillsData.filter(skill => skill.category === category);
-                
-                filteredSkills.forEach((skill, index) => {
-                    const hexagon = document.createElement('div');
-                    hexagon.className = 'skill-hexagon';
-                    hexagon.style.animationDelay = `${index * 0.1}s`;
-                    
-                    hexagon.innerHTML = `
-                        <div class="hexagon-inner">
-                            <div class="hexagon-content">
-                                <div class="skill-icon-hex">${skill.icon}</div>
-                                <div class="skill-name-hex">${skill.name}</div>
-                                <div class="skill-level">
-                                    <div class="skill-level-fill" style="width: ${skill.level}%"></div>
-                                </div>
-                                <div class="skill-percentage-hex">${skill.level}%</div>
-                            </div>
-                        </div>
-                    `;
-                    
-                    skillsGrid.appendChild(hexagon);
-                });
-            }
-            
-            categoryTabs.forEach(tab => {
-                tab.addEventListener('click', () => {
-                    categoryTabs.forEach(t => t.classList.remove('active'));
-                    tab.classList.add('active');
-                    displaySkills(tab.dataset.category);
-                });
-            });
-            
-            displaySkills();
-        }
-
         // Event listeners
         document.getElementById('nextBtn').addEventListener('click', () => nextSlide(true));
         document.getElementById('prevBtn').addEventListener('click', () => prevSlide(true));
-
-        // Auto-rotate carousel
-        setInterval(nextSlide, 5000);
 
         // Keyboard navigation
         document.addEventListener('keydown', (e) => {
@@ -307,7 +243,6 @@ https://templatemo.com/tm-600-prism-flux
 
         // Initialize on load
         initCarousel();
-        initSkillsGrid();
         initParticles();
 
         // Continuous auto-rotation of the featured carousel (infinite loop)
@@ -384,6 +319,11 @@ https://templatemo.com/tm-600-prism-flux
                 tab.classList.toggle('active', tab.dataset.classKey === key);
             });
 
+            const caption = document.getElementById('galleryCaption');
+            if (caption) {
+                caption.textContent = 'CLASS ' + key.split('-')[1].toUpperCase();
+            }
+
             const galleryGrid = document.getElementById('galleryGrid');
             const items = classesData[key] || [];
             galleryGrid.innerHTML = '';
@@ -444,11 +384,20 @@ https://templatemo.com/tm-600-prism-flux
                 if (targetSection) {
                     const headerHeight = header.offsetHeight;
                     const targetPosition = targetSection.offsetTop - headerHeight;
+                    const startY = window.scrollY;
                     
                     window.scrollTo({
                         top: targetPosition,
                         behavior: 'smooth'
                     });
+
+                    // Fallback: if the smooth scroll never starts (suspended
+                    // rendering contexts), jump instantly so navigation always lands
+                    setTimeout(() => {
+                        if (Math.abs(window.scrollY - startY) < 0.5) {
+                            window.scrollTo(0, targetPosition);
+                        }
+                    }, 150);
                     
                     // Close mobile menu if open
                     navMenu.classList.remove('active');
@@ -479,49 +428,6 @@ https://templatemo.com/tm-600-prism-flux
         }
 
         window.addEventListener('scroll', updateActiveNav);
-
-        // Animated counter for stats
-        function animateCounter(element) {
-            const target = parseInt(element.dataset.target);
-            const duration = 2000;
-            const step = target / (duration / 16);
-            let current = 0;
-            
-            const counter = setInterval(() => {
-                current += step;
-                if (current >= target) {
-                    element.textContent = target;
-                    clearInterval(counter);
-                } else {
-                    element.textContent = Math.floor(current);
-                }
-            }, 16);
-        }
-
-        // Intersection Observer for stats animation
-        const observerOptions = {
-            threshold: 0.5,
-            rootMargin: '0px 0px -100px 0px'
-        };
-
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    const statNumbers = entry.target.querySelectorAll('.stat-number');
-                    statNumbers.forEach(number => {
-                        if (!number.classList.contains('animated')) {
-                            number.classList.add('animated');
-                            animateCounter(number);
-                        }
-                    });
-                }
-            });
-        }, observerOptions);
-
-        const statsSection = document.querySelector('.stats-section');
-        if (statsSection) {
-            observer.observe(statsSection);
-        }
 
         // Loading screen
         window.addEventListener('load', () => {
