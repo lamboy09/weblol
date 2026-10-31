@@ -1,0 +1,947 @@
+@charset "utf-8";
+/* ============================================================
+   KAUSHALYA DARSHINI - Admin Mode styles
+   ------------------------------------------------------------
+   Uses the site theme variables (style.css) so Dark and Light
+   mode are both supported automatically. z-indexes live below
+   the site loader (10000).
+   ============================================================ */
+
+/* ---------- Shared buttons & fields ---------- */
+
+.kd-btn {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: 6px;
+	padding: 10px 18px;
+	border-radius: 10px;
+	border: 1px solid transparent;
+	font-family: inherit;
+	font-size: 14px;
+	font-weight: 600;
+	letter-spacing: 0.5px;
+	cursor: pointer;
+	transition: all 0.25s ease;
+	-webkit-tap-highlight-color: transparent;
+}
+
+.kd-btn-sm {
+	padding: 7px 13px;
+	font-size: 13px;
+}
+
+.kd-btn-primary {
+	background: linear-gradient(135deg, var(--accent-purple), var(--accent-blue));
+	color: #fff;
+	border-color: transparent;
+}
+
+.kd-btn-primary:hover {
+	transform: translateY(-1px);
+	box-shadow: 0 6px 18px rgba(153, 69, 255, 0.35);
+}
+
+.kd-btn-ghost {
+	background: var(--surface-a);
+	color: var(--text-primary);
+	border-color: var(--metal-dark);
+}
+
+.kd-btn-ghost:hover {
+	border-color: var(--accent-purple);
+	color: var(--accent-purple);
+}
+
+.kd-btn-danger {
+	background: transparent;
+	color: var(--accent-red);
+	border-color: var(--metal-dark);
+}
+
+.kd-btn-danger:hover {
+	background: rgba(255, 51, 51, 0.12);
+	border-color: var(--accent-red);
+}
+
+.kd-btn:disabled {
+	opacity: 0.45;
+	cursor: not-allowed;
+	transform: none !important;
+	box-shadow: none !important;
+}
+
+.kd-btn:focus-visible {
+	outline: 2px solid var(--accent-purple);
+	outline-offset: 2px;
+}
+
+.kd-field {
+	display: flex;
+	flex-direction: column;
+	gap: 5px;
+	min-width: 0;
+}
+
+.kd-field > span {
+	font-size: 11px;
+	font-weight: 700;
+	text-transform: uppercase;
+	letter-spacing: 1.5px;
+	color: var(--text-dim);
+}
+
+.kd-field-grow {
+	flex: 1;
+}
+
+/* ---------- Floating admin bar (mode indicators) ---------- */
+
+.kd-admin-bar {
+	position: fixed;
+	top: calc(14px + env(safe-area-inset-top, 0px));
+	right: calc(14px + env(safe-area-inset-right, 0px));
+	z-index: 8990;
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	padding: 8px 12px;
+	border-radius: 14px;
+	background: var(--surface-b);
+	backdrop-filter: blur(12px);
+	-webkit-backdrop-filter: blur(12px);
+	border: 1px solid rgba(153, 69, 255, 0.6);
+	box-shadow: 0 8px 30px rgba(0, 0, 0, 0.45);
+}
+
+.kd-admin-bar-tag {
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
+	font-size: 12px;
+	font-weight: 700;
+	letter-spacing: 1.5px;
+	text-transform: uppercase;
+	color: var(--text-primary);
+}
+
+.kd-admin-bar-tag i {
+	width: 8px;
+	height: 8px;
+	border-radius: 50%;
+	background: var(--accent-green);
+	box-shadow: 0 0 8px var(--accent-green);
+	animation: kdPulse 2s ease-in-out infinite;
+}
+
+@keyframes kdPulse {
+
+	0%,
+	100% {
+		opacity: 1;
+	}
+
+	50% {
+		opacity: 0.35;
+	}
+}
+
+.kd-admin-bar-actions {
+	display: flex;
+	gap: 6px;
+}
+
+/* ---------- Code prompt (discreet) ---------- */
+
+.kd-prompt {
+	position: fixed;
+	inset: 0;
+	z-index: 9200;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background: rgba(0, 0, 0, 0.55);
+	backdrop-filter: blur(6px);
+	-webkit-backdrop-filter: blur(6px);
+	animation: kdFadeIn 0.25s ease;
+}
+
+@keyframes kdFadeIn {
+	from {
+		opacity: 0;
+	}
+
+	to {
+		opacity: 1;
+	}
+}
+
+@keyframes kdFadeUp {
+	from {
+		opacity: 0;
+		transform: translateY(12px);
+	}
+
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+.kd-prompt-card {
+	width: min(320px, calc(100vw - 40px));
+	padding: 26px 24px;
+	border-radius: 16px;
+	background: var(--surface-b);
+	backdrop-filter: blur(16px);
+	-webkit-backdrop-filter: blur(16px);
+	border: 1px solid var(--metal-dark);
+	box-shadow: 0 20px 60px rgba(0, 0, 0, 0.55);
+	text-align: center;
+	animation: kdFadeUp 0.3s ease;
+}
+
+.kd-prompt-dot {
+	display: block;
+	width: 10px;
+	height: 10px;
+	margin: 0 auto 12px;
+	border-radius: 50%;
+	background: var(--accent-green);
+	box-shadow: 0 0 10px var(--accent-green);
+}
+
+.kd-prompt-title {
+	margin: 0 0 16px;
+	font-size: 13px;
+	font-weight: 700;
+	letter-spacing: 2px;
+	text-transform: uppercase;
+	color: var(--text-secondary);
+}
+
+.kd-code-input {
+	width: 100%;
+	padding: 12px 14px;
+	border-radius: 10px;
+	border: 1px solid var(--metal-dark);
+	background: var(--carbon-dark);
+	color: var(--text-primary);
+	font-size: 22px;
+	letter-spacing: 8px;
+	text-align: center;
+	font-family: inherit;
+	transition: border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.kd-code-input:focus {
+	outline: none;
+	border-color: var(--accent-purple);
+	box-shadow: 0 0 0 3px rgba(153, 69, 255, 0.25);
+}
+
+.kd-prompt-actions {
+	display: flex;
+	gap: 8px;
+	justify-content: center;
+	margin-top: 14px;
+}
+
+.kd-prompt-error {
+	margin: 12px 0 0;
+	font-size: 12.5px;
+	color: var(--accent-red);
+	min-height: 16px;
+}
+
+.kd-shake {
+	animation: kdShake 0.4s ease;
+}
+
+@keyframes kdShake {
+
+	0%,
+	100% {
+		transform: translateX(0);
+	}
+
+	25% {
+		transform: translateX(-7px);
+	}
+
+	50% {
+		transform: translateX(6px);
+	}
+
+	75% {
+		transform: translateX(-4px);
+	}
+}
+
+/* ---------- Confirm dialog ---------- */
+
+.kd-confirm {
+	position: fixed;
+	inset: 0;
+	z-index: 9400;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background: rgba(0, 0, 0, 0.6);
+	backdrop-filter: blur(6px);
+	-webkit-backdrop-filter: blur(6px);
+	animation: kdFadeIn 0.2s ease;
+}
+
+.kd-confirm-card {
+	width: min(420px, calc(100vw - 40px));
+	padding: 26px;
+	border-radius: 16px;
+	background: var(--surface-b);
+	backdrop-filter: blur(16px);
+	-webkit-backdrop-filter: blur(16px);
+	border: 1px solid var(--metal-dark);
+	box-shadow: 0 20px 60px rgba(0, 0, 0, 0.55);
+	animation: kdFadeUp 0.25s ease;
+}
+
+.kd-confirm-title {
+	margin: 0 0 10px;
+	font-size: 18px;
+	color: var(--text-primary);
+}
+
+.kd-confirm-msg {
+	margin: 0 0 20px;
+	font-size: 14px;
+	line-height: 1.6;
+	color: var(--text-secondary);
+	overflow-wrap: anywhere;
+}
+
+.kd-confirm-actions {
+	display: flex;
+	gap: 10px;
+	justify-content: flex-end;
+}
+
+/* ---------- Toasts ---------- */
+
+#kdToasts {
+	position: fixed;
+	bottom: calc(20px + env(safe-area-inset-bottom, 0px));
+	right: 20px;
+	z-index: 9500;
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+	pointer-events: none;
+}
+
+.kd-toast {
+	padding: 12px 18px;
+	border-radius: 12px;
+	background: var(--carbon-light);
+	border: 1px solid var(--metal-dark);
+	border-left: 3px solid var(--accent-purple);
+	color: var(--text-primary);
+	font-size: 13.5px;
+	box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+	animation: kdFadeUp 0.25s ease;
+	max-width: 340px;
+}
+
+.kd-toast-success {
+	border-left-color: var(--accent-green);
+}
+
+.kd-toast-error {
+	border-left-color: var(--accent-red);
+	color: var(--text-primary);
+}
+
+.kd-toast-out {
+	opacity: 0;
+	transform: translateY(6px);
+	transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+/* ============================================================
+   Dashboard
+   ============================================================ */
+
+.kd-admin-root {
+	position: fixed;
+	inset: 0;
+	z-index: 9000;
+	display: flex;
+	background: var(--carbon-dark);
+	color: var(--text-primary);
+	animation: kdFadeIn 0.3s ease;
+}
+
+.kd-admin-root:not([hidden]) {
+	display: flex;
+}
+
+/* ---------- Sidebar ---------- */
+
+.kd-admin-side {
+	width: 260px;
+	flex-shrink: 0;
+	display: flex;
+	flex-direction: column;
+	padding: 28px 20px;
+	background: var(--carbon-medium);
+	border-right: 1px solid var(--metal-dark);
+}
+
+.kd-admin-brand {
+	margin-bottom: 34px;
+}
+
+.kd-admin-brand strong {
+	display: block;
+	font-size: 15px;
+	letter-spacing: 1px;
+	background: linear-gradient(135deg, var(--text-primary), var(--accent-purple));
+	-webkit-background-clip: text;
+	background-clip: text;
+	-webkit-text-fill-color: transparent;
+}
+
+.kd-admin-brand span {
+	display: block;
+	margin-top: 4px;
+	font-size: 11px;
+	letter-spacing: 3px;
+	text-transform: uppercase;
+	color: var(--text-dim);
+}
+
+.kd-admin-nav {
+	display: flex;
+	flex-direction: column;
+	gap: 6px;
+	flex: 1;
+}
+
+.kd-nav-item {
+	display: block;
+	width: 100%;
+	text-align: left;
+	padding: 13px 16px;
+	border-radius: 10px;
+	border: 1px solid transparent;
+	background: transparent;
+	color: var(--text-secondary);
+	font-family: inherit;
+	font-size: 14.5px;
+	font-weight: 600;
+	cursor: pointer;
+	transition: all 0.2s ease;
+}
+
+.kd-nav-item:hover {
+	color: var(--text-primary);
+	background: var(--surface-a);
+}
+
+.kd-nav-item.active {
+	color: var(--text-primary);
+	background: linear-gradient(135deg, rgba(153, 69, 255, 0.18), rgba(0, 168, 255, 0.12));
+	border-color: rgba(153, 69, 255, 0.45);
+}
+
+.kd-admin-side-foot {
+	padding-top: 20px;
+	border-top: 1px solid var(--metal-dark);
+}
+
+/* ---------- Main column ---------- */
+
+.kd-admin-main {
+	flex: 1;
+	min-width: 0;
+	display: flex;
+	flex-direction: column;
+}
+
+.kd-admin-top {
+	display: flex;
+	align-items: center;
+	gap: 16px;
+	padding: 20px 32px;
+	border-bottom: 1px solid var(--metal-dark);
+	background: var(--surface-b);
+}
+
+.kd-admin-title {
+	margin: 0;
+	font-size: 20px;
+	letter-spacing: 1px;
+	text-transform: uppercase;
+	color: var(--text-primary);
+}
+
+.kd-admin-note {
+	flex: 1;
+	font-size: 12.5px;
+	color: var(--text-dim);
+}
+
+.kd-admin-body {
+	flex: 1;
+	overflow-y: auto;
+	padding: 24px 32px 60px;
+}
+
+.kd-notice {
+	margin: 0 0 18px;
+	padding: 12px 16px;
+	border-radius: 10px;
+	background: rgba(255, 51, 51, 0.08);
+	border: 1px solid rgba(255, 51, 51, 0.35);
+	color: var(--text-secondary);
+	font-size: 13px;
+}
+
+/* ---------- Toolbar ---------- */
+
+.kd-toolbar {
+	display: flex;
+	align-items: flex-end;
+	gap: 14px;
+	flex-wrap: wrap;
+	margin-bottom: 14px;
+	padding: 16px 18px;
+	border-radius: 14px;
+	background: var(--surface-b);
+	border: 1px solid var(--metal-dark);
+}
+
+.kd-check {
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
+	padding-bottom: 9px;
+	font-size: 13px;
+	color: var(--text-secondary);
+	cursor: pointer;
+	white-space: nowrap;
+}
+
+.kd-check input {
+	width: 16px;
+	height: 16px;
+	accent-color: var(--accent-purple);
+	cursor: pointer;
+}
+
+.kd-count {
+	margin: 0 0 12px;
+	font-size: 12.5px;
+	color: var(--text-dim);
+	letter-spacing: 0.5px;
+}
+
+/* ---------- Selects / inputs inside dark theme ---------- */
+
+.kd-admin-root select,
+.kd-admin-root input[type="text"],
+.kd-admin-root input[type="search"],
+.kd-admin-root textarea {
+	padding: 9px 12px;
+	border-radius: 9px;
+	border: 1px solid var(--metal-dark);
+	background: var(--carbon-dark);
+	color: var(--text-primary);
+	font-family: inherit;
+	font-size: 14px;
+	transition: border-color 0.2s ease;
+	width: 100%;
+}
+
+.kd-admin-root select:focus,
+.kd-admin-root input:focus,
+.kd-admin-root textarea:focus {
+	outline: none;
+	border-color: var(--accent-purple);
+}
+
+.kd-admin-root ::placeholder {
+	color: var(--text-dim);
+}
+
+/* ---------- Image rows ---------- */
+
+.kd-rows {
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+}
+
+.kd-row {
+	display: flex;
+	gap: 18px;
+	padding: 16px;
+	border-radius: 14px;
+	background: var(--surface-b);
+	border: 1px solid var(--metal-dark);
+	transition: border-color 0.25s ease;
+}
+
+.kd-row:hover {
+	border-color: var(--metal-light);
+}
+
+.kd-row-dirty {
+	border-color: rgba(153, 69, 255, 0.55);
+}
+
+.kd-thumb-btn {
+	flex-shrink: 0;
+	width: 132px;
+	height: 96px;
+	padding: 0;
+	border-radius: 10px;
+	overflow: hidden;
+	border: 1px solid var(--metal-dark);
+	background: var(--carbon-dark);
+	cursor: zoom-in;
+	transition: border-color 0.25s ease;
+}
+
+.kd-thumb-btn:hover {
+	border-color: var(--accent-purple);
+}
+
+.kd-thumb {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	display: block;
+}
+
+.kd-row-main {
+	flex: 1;
+	min-width: 0;
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+}
+
+.kd-row-head {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	flex-wrap: wrap;
+}
+
+.kd-row-name {
+	font-size: 13px;
+	font-weight: 700;
+	color: var(--text-primary);
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	max-width: 100%;
+}
+
+.kd-badge {
+	flex-shrink: 0;
+	padding: 3px 10px;
+	border-radius: 20px;
+	font-size: 10.5px;
+	font-weight: 700;
+	letter-spacing: 1px;
+	text-transform: uppercase;
+}
+
+.kd-badge-ok {
+	background: rgba(0, 255, 136, 0.12);
+	color: var(--accent-green);
+	border: 1px solid rgba(0, 255, 136, 0.35);
+}
+
+.kd-badge-warn {
+	background: rgba(255, 51, 51, 0.1);
+	color: var(--accent-red);
+	border: 1px solid rgba(255, 51, 51, 0.3);
+}
+
+.kd-badge-info {
+	background: rgba(0, 168, 255, 0.12);
+	color: var(--accent-blue);
+	border: 1px solid rgba(0, 168, 255, 0.35);
+}
+
+.kd-row-fields {
+	display: flex;
+	gap: 14px;
+	flex-wrap: wrap;
+}
+
+.kd-row-fields .kd-field:first-child {
+	width: 160px;
+}
+
+.kd-row-desc {
+	resize: vertical;
+	min-height: 52px;
+	line-height: 1.5;
+	font-size: 13.5px;
+}
+
+.kd-row-actions {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	flex-wrap: wrap;
+}
+
+.kd-row-status {
+	font-size: 12.5px;
+	color: var(--accent-green);
+	letter-spacing: 0.3px;
+}
+
+.kd-row-status.kd-status-error {
+	color: var(--accent-red);
+}
+
+/* ============================================================
+   Upload view
+   ============================================================ */
+
+.kd-upload-target {
+	display: flex;
+	flex-direction: column;
+	gap: 18px;
+}
+
+.kd-section-title {
+	margin: 0 0 4px;
+	font-size: 16px;
+	letter-spacing: 1px;
+	text-transform: uppercase;
+	color: var(--text-secondary);
+}
+
+.kd-drop {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	gap: 6px;
+	padding: 42px 20px;
+	border-radius: 14px;
+	border: 2px dashed var(--metal-light);
+	background: var(--surface-a);
+	color: var(--text-secondary);
+	cursor: pointer;
+	transition: all 0.25s ease;
+	text-align: center;
+}
+
+.kd-drop:hover,
+.kd-drop.dragover {
+	border-color: var(--accent-purple);
+	background: rgba(153, 69, 255, 0.08);
+	color: var(--text-primary);
+}
+
+.kd-drop strong {
+	font-size: 15px;
+	color: var(--text-primary);
+}
+
+.kd-drop span {
+	font-size: 12.5px;
+	color: var(--text-dim);
+}
+
+.kd-upload-list {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+	gap: 14px;
+}
+
+.kd-upload-item {
+	display: flex;
+	gap: 12px;
+	padding: 12px;
+	border-radius: 12px;
+	background: var(--surface-b);
+	border: 1px solid var(--metal-dark);
+	position: relative;
+}
+
+.kd-upload-item-error {
+	border-color: rgba(255, 51, 51, 0.5);
+}
+
+.kd-upload-preview {
+	width: 84px;
+	height: 84px;
+	flex-shrink: 0;
+	border-radius: 9px;
+	object-fit: cover;
+	border: 1px solid var(--metal-dark);
+	background: var(--carbon-dark);
+}
+
+.kd-upload-item-main {
+	flex: 1;
+	min-width: 0;
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+}
+
+.kd-upload-name {
+	margin: 0;
+	font-size: 12.5px;
+	font-weight: 700;
+	color: var(--text-primary);
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.kd-upload-status {
+	font-size: 12px;
+	color: var(--text-dim);
+}
+
+.kd-upload-item-error .kd-upload-status {
+	color: var(--accent-red);
+}
+
+.kd-upload-remove {
+	position: absolute;
+	top: 6px;
+	right: 6px;
+	width: 26px;
+	height: 26px;
+	border-radius: 50%;
+	border: 1px solid var(--metal-dark);
+	background: var(--carbon-dark);
+	color: var(--text-secondary);
+	font-size: 16px;
+	line-height: 1;
+	cursor: pointer;
+	transition: all 0.2s ease;
+}
+
+.kd-upload-remove:hover {
+	color: var(--accent-red);
+	border-color: var(--accent-red);
+}
+
+.kd-upload-actions {
+	display: flex;
+	align-items: center;
+	justify-content: flex-end;
+	gap: 16px;
+	margin-top: 4px;
+}
+
+.kd-upload-actions .kd-count {
+	margin: 0;
+}
+
+/* ============================================================
+   Public viewer - published description (data hookup styling)
+   ============================================================ */
+
+.viewer-desc {
+	margin: 10px auto 0;
+	max-width: 640px;
+	max-height: 84px;
+	overflow-y: auto;
+	font-size: 14px;
+	line-height: 1.55;
+	color: var(--text-secondary);
+	padding: 8px 14px;
+	border-radius: 10px;
+	background: var(--surface-a);
+	border: 1px solid var(--metal-dark);
+	border-left: 3px solid var(--accent-purple);
+	animation: kdFadeUp 0.35s ease;
+}
+
+/* ============================================================
+   Small screens - basic fallback only
+   ============================================================ */
+
+@media (max-width: 900px) {
+	.kd-admin-root {
+		flex-direction: column;
+	}
+
+	.kd-admin-side {
+		width: 100%;
+		flex-direction: row;
+		align-items: center;
+		gap: 16px;
+		padding: 14px 16px;
+		flex-shrink: 0;
+	}
+
+	.kd-admin-brand {
+		margin-bottom: 0;
+	}
+
+	.kd-admin-brand strong {
+		font-size: 13px;
+	}
+
+	.kd-admin-brand span {
+		display: none;
+	}
+
+	.kd-admin-nav {
+		flex-direction: row;
+	}
+
+	.kd-nav-item {
+		padding: 9px 12px;
+		font-size: 13px;
+		white-space: nowrap;
+	}
+
+	.kd-admin-side-foot {
+		padding: 0;
+		border: none;
+		margin-left: auto;
+	}
+
+	.kd-admin-top {
+		padding: 14px 16px;
+	}
+
+	.kd-admin-body {
+		padding: 16px;
+	}
+
+	.kd-row {
+		flex-direction: column;
+	}
+
+	.kd-thumb-btn {
+		width: 100%;
+		height: 180px;
+	}
+
+	.kd-admin-bar {
+		top: auto;
+		bottom: calc(14px + env(safe-area-inset-bottom, 0px));
+		max-width: calc(100vw - 28px);
+	}
+
+	#kdToasts {
+		right: 12px;
+		max-width: calc(100vw - 24px);
+	}
+}
